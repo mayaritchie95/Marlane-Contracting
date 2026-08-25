@@ -504,16 +504,14 @@ section{padding:var(--space-section) 0}
 /* PagePros credit line */
 .footer-credit{
   margin-top:22px;padding-top:20px;border-top:1px solid #2a2a2a;
-  display:flex;align-items:center;justify-content:center;gap:9px;
+  display:flex;align-items:center;justify-content:center;gap:11px;
   font-size:.9rem;color:#8b8680;text-align:center;flex-wrap:wrap;
 }
-.footer-credit .pagepros{
-  display:inline-flex;align-items:baseline;
-  font-family:var(--ff-body);font-size:1.12rem;color:#b8b3ac;letter-spacing:-.01em;
+.footer-credit .pagepros-logo{
+  height:20px;width:auto;display:inline-block;opacity:.85;
+  transition:opacity .2s ease;
 }
-.footer-credit .pp-light{font-weight:400}
-.footer-credit .pp-bold{font-weight:800;font-style:italic}
-.footer-credit .pp-tm{font-size:.55em;font-weight:400;margin-left:1px;transform:translateY(-.4em)}
+.footer-credit a:hover .pagepros-logo{opacity:1}
 
 /* -------------------- Prose (about) --------------------------------------- */
 .prose{max-width:68ch}
