@@ -177,15 +177,16 @@ p{margin:0 0 1.1em}
   position:absolute;inset:0;z-index:0;
   background-color:var(--ink);
   background-size:cover;background-position:center;
+  opacity:.28;
   transform:scale(1.06);
   animation:heroZoom 22s ease-in-out infinite alternate;
 }
 @keyframes heroZoom{from{transform:scale(1.06)}to{transform:scale(1.14)}}
 
-/* dark diagonal overlay so hero text stays legible over any photo */
+/* dark diagonal overlay to unify the ghosted background */
 .hero-bg::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(115deg,rgba(15,15,15,.95) 0%,rgba(18,18,18,.78) 44%,rgba(20,20,20,.42) 100%);
+  background:linear-gradient(115deg,rgba(15,15,15,.92) 0%,rgba(18,18,18,.82) 50%,rgba(20,20,20,.7) 100%);
 }
 /* moving red glow that pulses behind the headline */
 .hero-glow{
@@ -218,15 +219,41 @@ p{margin:0 0 1.1em}
 
 .hero-inner{
   position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;
-  padding:clamp(64px,9vw,108px) var(--gutter) clamp(56px,7vw,84px);
+  padding:clamp(56px,7vw,88px) var(--gutter) clamp(52px,6vw,76px);
 }
-/* staggered entrance for hero content */
-.hero-inner>*{animation:heroRise .8s cubic-bezier(.2,.7,.2,1) both}
-.hero-inner>.eyebrow{animation-delay:.05s}
-.hero-inner>h1{animation-delay:.15s}
-.hero-inner>.lede{animation-delay:.3s}
-.hero-inner>.hero-actions{animation-delay:.45s}
-.hero-inner>.hero-badges{animation-delay:.6s}
+/* two-column layout only when a hero photo is present (home page) */
+.hero-inner:has(.hero-figure){
+  display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,4vw,56px);align-items:center;
+}
+.hero-copy{min-width:0}
+/* crisp full-opacity photo beside the copy */
+.hero-figure{position:relative}
+.hero-photo{
+  width:100%;aspect-ratio:4/3;border-radius:var(--radius);
+  background-size:cover;background-position:center;
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.12);
+  animation:heroPhotoIn 1s cubic-bezier(.2,.7,.2,1) both;animation-delay:.35s;
+}
+/* red corner accent framing the photo */
+.hero-figure::before{
+  content:"";position:absolute;left:-14px;top:-14px;width:64px;height:64px;
+  border-left:4px solid var(--red);border-top:4px solid var(--red);border-radius:6px 0 0 0;
+  z-index:1;
+}
+.hero-figure::after{
+  content:"";position:absolute;right:-14px;bottom:-14px;width:64px;height:64px;
+  border-right:4px solid var(--red);border-bottom:4px solid var(--red);border-radius:0 0 6px 0;
+}
+@keyframes heroPhotoIn{from{opacity:0;transform:translateX(28px) scale(.98)}to{opacity:1;transform:none}}
+
+/* staggered entrance for hero copy */
+.hero-copy>*{animation:heroRise .8s cubic-bezier(.2,.7,.2,1) both}
+.hero-copy>.eyebrow{animation-delay:.05s}
+.hero-copy>h1{animation-delay:.15s}
+.hero-copy>.lede{animation-delay:.3s}
+.hero-copy>.hero-actions{animation-delay:.45s}
+.hero-copy>.hero-badges{animation-delay:.6s}
 @keyframes heroRise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 
 .hero h1{color:#fff;max-width:20ch}
@@ -285,8 +312,9 @@ section{padding:var(--space-section) 0}
 .card::before{content:"";position:absolute;left:0;top:0;height:4px;width:100%;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
 .card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
 .card:hover::before{transform:scaleX(1)}
-.card .card-mark{display:inline-block;width:18px;height:18px;background:var(--red);transform:rotate(45deg);border-radius:2px;transition:transform .25s ease}
-.card:hover .card-mark{transform:rotate(135deg)}
+.card .card-mark{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:var(--radius);background:var(--red);color:#fff;margin-bottom:14px;box-shadow:0 6px 16px rgba(192,39,30,.25);transition:transform .25s ease}
+.card .card-mark svg{width:24px;height:24px}
+.card:hover .card-mark{transform:translateY(-3px)}
 .card h3{margin:.5rem 0 .6rem}
 .card p{margin:0;font-size:1rem;color:var(--slate)}
 
@@ -299,6 +327,7 @@ section{padding:var(--space-section) 0}
   font-family:var(--ff-display);font-size:1.4rem;line-height:1;
   text-align:center;box-shadow:0 6px 18px rgba(192,39,30,.28);
 }
+.value .mark svg{width:26px;height:26px}
 .value h3{font-size:1.15rem;margin:.2rem 0 .3rem}
 .value p{margin:0;color:var(--slate);font-size:1rem}
 
@@ -395,21 +424,54 @@ section{padding:var(--space-section) 0}
 .tile .cap small{display:block;font-family:var(--ff-body);text-transform:none;letter-spacing:0;color:var(--steel-light);font-size:.8rem}
 
 /* -------------------- Forms ----------------------------------------------- */
-.form-wrap{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:clamp(26px,4vw,44px);box-shadow:var(--shadow)}
-.field{margin-bottom:20px}
-.field label{display:block;font-family:var(--ff-display);text-transform:uppercase;letter-spacing:.06em;font-size:.85rem;margin-bottom:8px}
-.field .req{color:var(--red)}
+.form-wrap{background:#fff;border:1px solid var(--line);border-top:4px solid var(--red);border-radius:var(--radius);padding:clamp(26px,4vw,46px);box-shadow:var(--shadow)}
+.form-wrap .form-lead{font-family:var(--ff-display);text-transform:uppercase;letter-spacing:.06em;font-size:1.1rem;margin:0 0 22px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.field{margin-bottom:22px;display:flex;flex-direction:column}
+.field label{font-family:var(--ff-display);text-transform:uppercase;letter-spacing:.06em;font-size:.8rem;color:var(--slate);margin-bottom:8px;min-height:1.1em;display:flex;align-items:flex-end}
+.field .req{color:var(--red);margin-left:2px}
 .field input,.field select,.field textarea{
-  width:100%;padding:14px 16px;border:1px solid var(--steel);border-radius:var(--radius);
+  width:100%;height:52px;padding:0 16px;border:1px solid var(--line);border-radius:var(--radius);
   font-family:var(--ff-body);font-size:1rem;background:var(--paper);color:var(--ink);
+  transition:border-color .15s ease,box-shadow .15s ease;
 }
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);outline:none;box-shadow:0 0 0 3px rgba(192,39,30,.15)}
-.field textarea{min-height:130px;resize:vertical}
-.hint{font-size:.85rem;color:var(--slate);margin-top:6px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.field textarea{height:auto;min-height:140px;padding:14px 16px;resize:vertical;line-height:1.5}
+.field input::placeholder,.field textarea::placeholder{color:#9a938c}
+.field input:hover,.field select:hover,.field textarea:hover{border-color:var(--steel)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);outline:none;box-shadow:0 0 0 3px rgba(192,39,30,.15);background:#fff}
+
+/* custom select arrow */
+.field.select-field{position:relative}
+.field select{appearance:none;-webkit-appearance:none;-moz-appearance:none;padding-right:44px;cursor:pointer}
+.field.select-field::after{
+  content:"";position:absolute;right:18px;bottom:19px;width:9px;height:9px;
+  border-right:2px solid var(--slate);border-bottom:2px solid var(--slate);
+  transform:rotate(45deg);pointer-events:none;
+}
+
+.hint{font-size:.85rem;color:var(--slate);margin-top:8px}
+/* aligned two-up rows: labels + fields line up regardless of label length */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px 20px;align-items:start}
+.form-row .field{margin-bottom:0}
+.form-wrap .form-row + .field,.form-wrap .field + .form-row,.form-wrap .form-row + .form-row,.form-wrap .form-lead + .form-row{margin-top:22px}
 .form-note{font-size:.85rem;color:var(--slate)}
+.form-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 22px;margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
+.form-actions .btn{margin:0}
+.form-actions .form-note{margin:0}
 .form-status{display:none;padding:16px;border-radius:var(--radius);margin-bottom:18px;font-weight:600}
 .form-status.ok{display:block;background:#EAF6EC;color:#1f6b2e;border:1px solid #bfe3c6}
+
+/* Contact page split + methods list */
+.contact-split{grid-template-columns:0.85fr 1.15fr;gap:clamp(28px,4vw,56px)}
+.contact-intro{position:sticky;top:100px}
+.contact-methods{list-style:none;padding:0;margin:28px 0}
+.contact-methods li{display:flex;align-items:center;gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.contact-methods li:last-child{border-bottom:1px solid var(--line)}
+.cm-icon{flex:0 0 auto;width:44px;height:44px;border-radius:var(--radius);background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(192,39,30,.25)}
+.cm-icon svg{width:22px;height:22px}
+.cm-body{display:flex;flex-direction:column;min-width:0}
+.cm-label{font-family:var(--ff-display);text-transform:uppercase;letter-spacing:.1em;font-size:.72rem;color:var(--slate)}
+.cm-body a,.cm-text{font-size:1.1rem;font-weight:600;color:var(--ink);word-break:break-word}
+.cm-body a:hover{color:var(--red)}
 
 /* -------------------- Contact info bar ------------------------------------ */
 .contact-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-grid)}
@@ -460,9 +522,14 @@ section{padding:var(--space-section) 0}
   .gallery{grid-template-columns:repeat(2,1fr)}
   .area-list{grid-template-columns:repeat(3,1fr)}
   .split{grid-template-columns:1fr;gap:var(--space-md)}
+  .contact-split{grid-template-columns:1fr}
+  .contact-intro{position:static}
   .split .media{max-height:420px}
   .footer-grid{grid-template-columns:1fr 1fr;gap:var(--space-md)}
   .hero .lede{font-size:1.15rem}
+  .hero-inner:has(.hero-figure){grid-template-columns:1fr;gap:32px}
+  .hero-figure{order:-1;max-width:520px}
+  .hero-photo{aspect-ratio:16/9}
 }
 /* Collapse to hamburger when the horizontal row would crowd */
 @media (max-width:880px){
