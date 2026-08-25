@@ -118,11 +118,8 @@ p{margin:0 0 1.1em}
   min-height:72px;position:relative;
 }
 .brand{display:flex;flex-direction:row;align-items:center;gap:11px;font-family:var(--ff-display);text-align:left}
-.brand .logo{width:44px;height:44px;flex:0 0 auto}
-.brand .name{line-height:1;text-transform:uppercase}
-.brand .name b{display:block;font-size:1.3rem;font-weight:700;letter-spacing:.05em;color:var(--ink)}
-.brand .name span{display:block;font-size:.62rem;letter-spacing:.34em;color:var(--red);margin-top:3px}
-.brand:hover{text-decoration:none}
+.brand-logo{height:52px;width:auto;display:block}
+.brand:hover{text-decoration:none;opacity:.9}
 
 .nav-links{
   display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;
@@ -405,6 +402,46 @@ section{padding:var(--space-section) 0}
 }
 .quote-feature .who span{display:block;color:var(--red);font-size:.78rem;letter-spacing:.12em;margin-top:.25rem}
 
+/* Testimonial carousel */
+.testimonials{max-width:820px;margin:0 auto}
+.t-viewport{overflow:hidden}
+.t-track{display:flex;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.t-slide{
+  flex:0 0 100%;min-width:0;box-sizing:border-box;
+  background:#fff;border:1px solid var(--line);border-top:4px solid var(--red);
+  border-radius:var(--radius);padding:clamp(28px,4vw,46px);box-shadow:var(--shadow);
+  text-align:center;position:relative;margin:6px;
+}
+.t-slide::before{
+  content:"\201C";position:absolute;top:-.1em;left:50%;transform:translateX(-50%);
+  font-family:var(--ff-display);font-size:4.5rem;color:var(--red);opacity:.14;line-height:1;
+}
+.t-slide .stars{font-size:1.1rem;margin-bottom:1rem;position:relative}
+.t-slide blockquote{
+  margin:0 0 1.4rem;font-size:clamp(1.02rem,1.5vw,1.18rem);line-height:1.6;
+  color:var(--ink-soft);font-style:italic;
+}
+.t-slide .who{
+  font-family:var(--ff-display);text-transform:uppercase;letter-spacing:.07em;
+  font-size:1rem;color:var(--ink);
+}
+.t-slide .who span{display:block;color:var(--red);font-size:.76rem;letter-spacing:.1em;margin-top:.3rem;font-style:normal}
+
+.t-controls{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:24px}
+.t-btn{
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow-sm);transition:.18s ease;flex:0 0 auto;
+}
+.t-btn:hover{background:var(--red);color:#fff;border-color:var(--red);transform:translateY(-2px)}
+.t-btn svg{width:20px;height:20px}
+.t-dots{display:flex;gap:9px;align-items:center}
+.t-dot{
+  width:9px;height:9px;border-radius:50%;border:none;padding:0;background:var(--steel-light);
+  cursor:pointer;transition:.2s ease;
+}
+.t-dot[aria-selected="true"]{background:var(--red);transform:scale(1.35)}
+
 /* -------------------- Gallery --------------------------------------------- */
 .gallery-filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:2rem}
 .gallery-filters button{
@@ -560,8 +597,7 @@ section{padding:var(--space-section) 0}
 /* Mobile */
 @media (max-width:600px){
   body{font-size:17px}
-  .brand .name b{font-size:1.2rem;letter-spacing:.04em}
-  .brand .name span{letter-spacing:.26em;font-size:.6rem}
+  .brand-logo{height:42px}
   .grid-3,.grid-2,.stats,.quotes,.contact-cards,.gallery,.form-row{grid-template-columns:1fr}
   .stat{padding:6px 0}
   .stat + .stat,.stat:nth-child(even){border-left:none}
